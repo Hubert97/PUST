@@ -67,7 +67,7 @@ u=U-Upp;
 
     for k=12:kk-N %symulacja obiektu i regulatora
         %sygna³ steruj¹cy regulatora DMC
-        Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));%jak sie na pocz¹tku zmieni na ma³e y to dzia³a, ale Ÿle
+        y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
         y(k)=Y(k)-Ypp;
         
         deltaUP(2:D-1)=deltaUP(1:D-2);
