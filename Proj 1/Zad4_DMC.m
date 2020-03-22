@@ -14,18 +14,6 @@ delta_u_max=0.1;
 u_max=u_max-Upp;
 u_min=u_min-Upp;
 
-%deklaracja wektorów sygna³ów oraz b³êdów
-U=zeros(1, kk);
-u=zeros(kk-N);
-U(:)=Upp;
-Y=zeros(1, kk);
-y=zeros(1, kk);
-Y(1:12)=Ypp;
-
-yzad=zeros(1, kk);
-yzad(1:kk)=skok;
-yzad=yzad-Ypp;
-
 %DMC
     u_min=1;
     u_max=2;
@@ -36,6 +24,19 @@ yzad=yzad-Ypp;
     D=100; %horyzont dynamiki (D)
     N=100;%horyzont predykcji (N)
     Nu=100; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
+    
+%deklaracja wektorów sygna³ów oraz b³êdów
+    U=zeros(kk-N);
+    u=zeros(kk-N);
+    U(:)=Upp;
+    Y=zeros(1, kk);
+    y=zeros(1, kk);
+    Y(1:12)=Ypp;
+
+    Yzad=zeros(1, kk);
+    yzad=zeros(1, kk);
+    yzad(12:kk)=skok;
+    Yzad=yzad-Ypp;
 
     Mp=zeros(N,D-1);        %macierz ma wymiary Nx(D-1)
     for i=1:D-1 %wypelnianie macierzy Mp
@@ -58,8 +59,8 @@ yzad=yzad-Ypp;
 
     for k=12:kk-N %symulacja obiektu i regulatora
         %sygna³ steruj¹cy regulatora DMC
-        y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
-        
+        Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
+        y(k)=Y(k)-Ypp
         %symulacja zak³ócenia 
 %         if k>100    
 %             y(k)=y(k)+zaklocenie;
@@ -68,8 +69,8 @@ yzad=yzad-Ypp;
         deltaUP(2:D-1)=deltaUP(1:D-2);
         deltaUP(1) = u(k-1)-u(k-2);  
         Y0=Mp*deltaUP+y(k);
-        Yzad=yzad(k+1:k+N);
-        deltaU=K*(Yzad-Y0);	
+        YZAD=yzad(k+1:k+N);
+        deltaU=K*(YZAD-Y0);	
         delta_u=deltaU(1)
         
         %ograniczenie ró¿nic sygna³u steruj¹cego 
