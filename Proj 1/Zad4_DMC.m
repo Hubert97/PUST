@@ -14,6 +14,18 @@ delta_u_max=0.1;
 u_max=u_max-Upp;
 u_min=u_min-Upp;
 
+%deklaracja wektorów sygna³ów oraz b³êdów
+U=zeros(1, kk);
+u=zeros(1, kk);
+U(:)=Upp;
+Y=zeros(1, kk);
+y=zeros(1, kk);
+Y(1:12)=Ypp;
+
+yzad=zeros(1, kk);
+yzad(1:kk)=2.3;
+yzad=yzad-Ypp;
+
 %DMC
     u_min=1;
     u_max=2;
@@ -24,19 +36,6 @@ u_min=u_min-Upp;
     D=100; %horyzont dynamiki (D)
     N=100;%horyzont predykcji (N)
     Nu=100; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
-    
-%deklaracja wektorów sygna³ów oraz b³êdów
-    U=zeros(kk-N);
-    u=zeros(kk-N);
-    U(:)=Upp;
-    Y=zeros(1, kk);
-    y=zeros(1, kk);
-    Y(1:12)=Ypp;
-
-    Yzad=zeros(1, kk);
-    yzad=zeros(1, kk);
-    yzad(12:kk)=skok;
-    Yzad=yzad-Ypp;
 
     Mp=zeros(N,D-1);        %macierz ma wymiary Nx(D-1)
     for i=1:D-1 %wypelnianie macierzy Mp
@@ -52,15 +51,21 @@ u_min=u_min-Upp;
 
     I=eye(Nu);              %tworzenie macierzy jednostkowej o wymiarach NuxNu
     K=inv(M.'*M+lambda*I)*M.';   %macierz K
+    
+    u(1:kk)=0; 
+    y(1:kk)=0; 
+    yzad(1:12)=0;
+    yzad(12:kk)=skok; %skok sygna³u steruj¹cego
 
+    u=zeros(kk-N);
     deltaUP(1:D-1,1)=0;
     deltaU=0;
     Ku=K(1,:)*Mp;
 
     for k=12:kk-N %symulacja obiektu i regulatora
         %sygna³ steruj¹cy regulatora DMC
-        Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
-        y(k)=Y(k)-Ypp
+        y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
+        
         %symulacja zak³ócenia 
 %         if k>100    
 %             y(k)=y(k)+zaklocenie;
@@ -69,26 +74,24 @@ u_min=u_min-Upp;
         deltaUP(2:D-1)=deltaUP(1:D-2);
         deltaUP(1) = u(k-1)-u(k-2);  
         Y0=Mp*deltaUP+y(k);
-        YZAD=yzad(k+1:k+N);
-        deltaU=K*(YZAD-Y0);	
-        delta_u=deltaU(1)
-        
-        %ograniczenie ró¿nic sygna³u steruj¹cego 
-        if delta_u>delta_u_max
-             delta_u=delta_u_max; 
-        elseif delta_u<(-delta_u_max)
-             delta_u=-delta_u_max;
-        end
-
+        Yzad=yzad(k+1:k+N);
+        deltaU=K*(Yzad-Y0);	
+        delta_u=deltaU(1);
         u(k)=u(k-1) + deltaU(1);
-        %ograniczenie sygna³u steruj¹cego
-        if u(k)>u_max
-            u(k)=u_max;
-        elseif u(k)<u_min
-            u(k)=u_min;
-        end
-         U(k)=u(k)+Upp;
-          
+        %ograniczenia sygna³u steruj¹cego 
+    if delta_u>delta_u_max
+         delta_u=delta_u_max; 
+    elseif delta_u<(-delta_u_max)
+         delta_u=-delta_u_max;
+    end
+     u(k)=delta_u+u(k-1);
+    if u(k)>u_max
+        u(k)=u_max;
+    elseif u(k)<u_min
+        u(k)=u_min;
+    end
+     U(k)=u(k)+Upp;
+     
     end
 %wyniki symulacji
     figure(1); stairs(u(1:kk-N));hold on
