@@ -1,17 +1,41 @@
-kk=500;
-%DMC
-%     Umin=-0.4;
-%     Umax=0.4;
-%     deltaUmax=0.1;
-%     zaklocenie=0.5;
+kk=1200;
+skok=2;
+load gotowa_odp_skokowa.mat
+transpose(gotowa_odp_skokowa)
+%inicjalizacja
+%Punkt Pracy
+Upp=1.5;
+Ypp=2.2;
 
-    tau0=0; %domyœlnie 0
-    K0=1; %domyœlnie 1
+%Ograniczenia
+u_min=1;
+u_max=2;
+delta_u_max=0.1;
+u_max=u_max-Upp;
+u_min=u_min-Upp;
+
+%deklaracja wektorów sygna³ów oraz b³êdów
+U=zeros(1, kk);
+u=zeros(kk-N);
+U(:)=Upp;
+Y=zeros(1, kk);
+y=zeros(1, kk);
+Y(1:12)=Ypp;
+
+yzad=zeros(1, kk);
+yzad(1:kk)=skok;
+yzad=yzad-Ypp;
+
+%DMC
+    u_min=1;
+    u_max=2;
+    delta_u_max=0.1;
+    %zaklocenie=0.5;
 
     lambda=1; %parametr lambda np. 1
-    D=200; %horyzont dynamiki (D)
-    N=12;%horyzont predykcji (N)
-    Nu=2; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
+    D=100; %horyzont dynamiki (D)
+    N=100;%horyzont predykcji (N)
+    Nu=100; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
 
     Mp=zeros(N,D-1);        %macierz ma wymiary Nx(D-1)
     for i=1:D-1 %wypelnianie macierzy Mp
@@ -31,8 +55,8 @@ kk=500;
     u(1:kk)=0; 
     y(1:kk)=0; 
     yzad(1:12)=0;
-    yzad(12:kk)=2; %skok sygna³u steruj¹cego
-
+    yzad(12:kk)=skok; %skok sygna³u steruj¹cego
+    
     u=zeros(kk-N);
     deltaUP(1:D-1,1)=0;
     deltaU=0;
@@ -40,7 +64,7 @@ kk=500;
 
     for k=12:kk-N %symulacja obiektu i regulatora
         %sygna³ steruj¹cy regulatora DMC
-        Y(k)=symulacja_obiektu5Y(u(k-10),u(k-11),y(k-1),y(k-2));
+        y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),y(k-1),y(k-2));
         
         %symulacja zak³ócenia 
 %         if k>100    
@@ -52,33 +76,30 @@ kk=500;
         Y0=Mp*deltaUP+y(k);
         Yzad=yzad(k+1:k+N);
         deltaU=K*(Yzad-Y0);	
+        delta_u=deltaU(1)
+        
+        %ograniczenie ró¿nic sygna³u steruj¹cego 
+        if delta_u>delta_u_max
+             delta_u=delta_u_max; 
+        elseif delta_u<(-delta_u_max)
+             delta_u=-delta_u_max;
+        end
+
         u(k)=u(k-1) + deltaU(1);
-        
-        %ograniczenia sygna³u steruj¹cego
-        
-%         if u(k)>Umax  
-%             u(k)=Umax;
-%         end
-%         
-%         if u(k)<Umin 
-%             u(k)=Umin;
-%         end
-%         
-%         if u(k)-u(k-1) >deltaUmax
-%             u(k)=u(k-1)+deltaUmax;
-%         end
-%         
-%         if u(k)-u(k-1) <-deltaUmax 
-%             u(k)=u(k-1)-deltaUmax;
-%         end
-%         
+        %ograniczenie sygna³u steruj¹cego
+        if u(k)>u_max
+            u(k)=u_max;
+        elseif u(k)<u_min
+            u(k)=u_min;
+        end
+         U(k)=u(k)+Upp;
+          
     end
-    %wyniki symulacji
-%DMC
+%wyniki symulacji
     figure(1); stairs(u(1:kk-N));hold on
 %      ylim([-1,3]);
     title('Sygna³ sterowania DMC'); xlabel('Próbka');
-    figure(2); stairs(y(1:kk-N)); hold on; %stairs(yzad(1:kk-N),':');
-%       ylim([-1,3]);
+    figure(2); stairs(y(1:kk-N)); hold on; 
+    stairs(yzad(1:kk-N),':');      ylim([-1,3]);
     title('wyjœcie regulatora DMC'); xlabel('Próbka'); ylabel('Sygna³ wyjœciowy');
     legend('Wartosc wyjscia','y zadane');
