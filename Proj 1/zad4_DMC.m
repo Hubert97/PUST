@@ -17,11 +17,12 @@ D=200; %horyzont dynamiki (D)
 N=50;%horyzont predykcji (N)
 Nu=30; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
 
+D=150; N=35; Nu=5; lambda=1 %NAJLEPSZE PARAMETRY SWIATA
 %D=200; N=50; Nu=10; % robocze parametry
 
 %deklaracja wektorów sygna³ów oraz b³êdów
 U=zeros(1, kk);
-u=zeros(kk-N);
+u=zeros(kk);
 U(:)=Upp;
 e=zeros(1, kk);
 Y=zeros(1, kk);
@@ -84,11 +85,13 @@ for k=12:kk-N %symulacja obiektu i regulatora
 
 end
 wskaznik_jakosci=sum(e.^2);
-yzad=yzad+Ypp;
+yzad=yzad(1:kk-N)+Ypp;
+Y=Y(1:kk-N);
+U=U(1:kk-N);
 %wyniki symulacji
-figure(1); stairs(U(1:kk-N));hold on
+figure; stairs(U);hold on
 title('Sygna³ sterowania DMC'); xlabel('k');
-figure(2); stairs(Y(1:kk-N)); hold on; 
-stairs(yzad(1:kk-N),':'); xlim([0, kk-N]);     
+figure; stairs(Y); hold on; 
+stairs(yzad,':'); xlim([0, kk-N]);     
 title('Wyjœcie regulatora DMC'); xlabel('k'); ylabel('wartoœæ sygna³u');
 legend('wyjœcie y(k)','wartoœæ zadana');
