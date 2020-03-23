@@ -35,27 +35,15 @@ for j=(U_pp+0.1):0.1:u_max
 end
 
 %CHARAKTERYSTYKA STATYCZNA
-for i=1:600
-   U(12:kk)=i*0.005;
-   for k=12:kk
-       Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),Y(k-1),Y(k-2));
-   end
-   Ustat(i)=U(kk);
-   Ystat(i)=Y(kk);
+for i=1:1000
+   du(i)=i*0.001;
+   U(12:kk)=1.1+du;
+   for k=12:n
+       Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),Y(k-1),Y(k-2))
    
 end
-%WZMOCNIENIE STATYCZNE
-Kstat=(Ystat(400)-Ystat(200))/(Ustat(400)-Ustat(200));
 
-%%%%%%%%%%%%%%%%WYKRESY%%%%%%%%%%%%%%%%%%
-
-%WYKRES CHARAKTERYSTYKI STATYCZNEJ
-plot(Ustat,Ystat);
-xlabel('U');
-ylabel('Y');
-title('Charakterystyka statyczna Y(U)');
-
-%WYKRES ODPOWIEDZI SKOKOWEJ I SKOKU SYGNA£U
+%WYKRESY
 figure
 
 subplot(2,1,1);
@@ -82,7 +70,6 @@ hold off
 title('Sygna³ steruj¹cy u(k)');
 xlabel('k');
 ylabel('wartoœæ sygna³u');
-
 
 %%% Zadanie 3 - Odpowiedz skokowa gotowa do dmc
 gotowa_odp_skokowa=(odp_skok_tablica(5,21:kk)-Y_pp)/(2-1.5);
