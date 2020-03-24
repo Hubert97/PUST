@@ -12,12 +12,15 @@ u_min=1-Upp;
 u_max=2-Upp;
 delta_u_max=0.1;
 
-lambda=1; %parametr lambda np. 1
-D=200; %horyzont dynamiki (D)
-N=50;%horyzont predykcji (N)
-Nu=30; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
+% lambda=1; %parametr lambda np. 1
+% D=200; %horyzont dynamiki (D)
+% N=50;%horyzont predykcji (N)
+% Nu=30; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
 
-D=150; N=35; Nu=5; lambda=1 %NAJLEPSZE PARAMETRY SWIATA
+load('optymalne_parametry_DMC.mat');
+%paametry dobrane przez funkcjê fmincon()
+D=150; N=nastawy_DMC_fmincon(1); Nu=nastawy_DMC_fmincon(2); lambda=nastawy_DMC_fmincon(3);
+%D=150; N=35; Nu=5; lambda=1 %NAJLEPSZE EKSPERYMENTALNE PARAMETRY SWIATA
 %D=200; N=50; Nu=10; % robocze parametry
 
 %deklaracja wektorów sygna³ów oraz b³êdów
@@ -54,7 +57,6 @@ K=inv(M.'*M+lambda*I)*M.';   %macierz K
 
 deltaUP(1:D-1,1)=0;
 deltaU=0;
-Ku=K(1,:)*Mp;
 
 for k=12:kk-N %symulacja obiektu i regulatora
     Y(k)=symulacja_obiektu5Y(U(k-10),U(k-11),Y(k-1),Y(k-2));

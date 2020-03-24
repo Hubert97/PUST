@@ -1,5 +1,4 @@
 clear all;
-
 %inicjalizacja
 %Punkt Pracy
 Upp=1.5;
@@ -31,11 +30,14 @@ yzad(round(3*kk/5):round(4*kk/5))=2.3;
 yzad(round(4*kk/5):round(5*kk/5))=2.4;
 yzad=yzad-Ypp;
 
+load('optymalne_parametry_PID.mat');
 K_kryt=5.03; T_kryt=0;
 %K=5.03; Ti=inf; Td=0; %niegasnace oscylacje
-K=K_kryt*0.5; Ti=22; Td=7; %Ti=22 Td=7 git
+%K=K_kryt*0.5; Ti=22; Td=7; %NAJLEPSZE EKSPERYMENTALNE PARAMETRY
 
-%Td=T_kryt/8;
+K=nastawy(1); Ti=nastawy(2); Td=nastawy(3);  %parametry dobrane funkcj¹ fmincon
+%K=nastawy_2(1); Ti=nastawy_2(2); Td=nastawy_2(3); %parametry dobrane przez
+                                                    %funkcje ga()
 T=0.5;
 
 r2=K*Td/T;
