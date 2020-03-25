@@ -1,19 +1,20 @@
 clear all;
-%inicjalizacja
-%Punkt Pracy
+%%%%%%inicjalizacja%%%%%%
+
+kk=1500; %d³ugoœæ symulacji
+
+%%%%%%%%Punkt Pracy%%%%%%%%%
 Upp=1.5;
 Ypp=2.2;
 
-%Ograniczenia
+%%%%%%%%%Ograniczenia%%%%%%%%
 u_min=1;
 u_max=2;
 delta_umax=0.1;
 u_max=u_max-Upp;
 u_min=u_min-Upp;
 
-kk=1500; %d³ugoœæ symulacji
-
-%deklaracja wektorów sygna³ów oraz b³êdów
+%%%%%%%deklaracja wektorów sygna³ów oraz b³êdów%%%%%%%
 U=zeros(1, kk);
 u=zeros(1, kk);
 U(:)=Upp;
@@ -51,15 +52,15 @@ for k=12:kk %g³ówna pêtla symulacyjna
     %uchyb regulacji
     e(k)=yzad(k)-y(k);
     %sygna³ steruj¹cy regulatora PID
-    %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
     delta_u=r2*e(k-2)+r1*e(k-1)+r0*e(k);
-        
+    
+    %ograniczenia     
     if delta_u>delta_umax
          delta_u=delta_umax; 
     elseif delta_u<(-delta_umax)
          delta_u=-delta_umax;
     end
-     u(k)=delta_u+u(k-1);
+    u(k)=delta_u+u(k-1);
     if u(k)>u_max
         u(k)=u_max;
     elseif u(k)<u_min
@@ -67,9 +68,10 @@ for k=12:kk %g³ówna pêtla symulacyjna
     end
      U(k)=u(k)+Upp;
 end
-yzad=yzad+Ypp;
+yzad=yzad+Ypp; %przesuniêcie do punktu pracy
 wskaznik_jakosci=sum(e.^2);
-%wyniki symulacji
+
+%%%%%%%%prezentacja wyników symulacji%%%%%%%%
 figure; stairs(U);
 title('Sterowanie regulatora PID'); xlabel('k'); ylabel('wartoœæ sygna³u');
 figure; stairs(Y); hold on; stairs(yzad,':'); legend('wyjœcie y(k)','wartoœæ zadana');
