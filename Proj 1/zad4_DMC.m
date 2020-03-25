@@ -1,13 +1,14 @@
 clear all
+%%%%%%%inicjalizacja%%%%%%
 kk=1500;
 load('gotowa_odp_skokowa.mat', 'gotowa_odp_skokowa');
 transpose(gotowa_odp_skokowa);
-%inicjalizacja
-%Punkt Pracy
+
+%%%%%%%%Punkt Pracy%%%%%%%%
 Upp=1.5;
 Ypp=2.2;
 
-%Ograniczenia
+%%%%%%%%%Ograniczenia%%%%%%%
 u_min=1-Upp;
 u_max=2-Upp;
 delta_u_max=0.1;
@@ -18,12 +19,12 @@ delta_u_max=0.1;
 % Nu=30; %horyzont sterowania (Nu)(ilosc przyszlych przyrostow wartosci sterowania)
 
 load('optymalne_parametry_DMC.mat');
-%paametry dobrane przez funkcjê fmincon()
+%parametry dobrane przez funkcjê fmincon()
 D=150; N=nastawy_DMC_fmincon(1); Nu=nastawy_DMC_fmincon(2); lambda=nastawy_DMC_fmincon(3);
 %D=150; N=35; Nu=5; lambda=1 %NAJLEPSZE EKSPERYMENTALNE PARAMETRY SWIATA
 %D=200; N=50; Nu=10; % robocze parametry
 
-%deklaracja wektorów sygna³ów oraz b³êdów
+%%%%%%deklaracja wektorów sygna³ów oraz b³êdów%%%%%%
 U=zeros(1, kk);
 u=zeros(kk);
 U(:)=Upp;
@@ -90,7 +91,8 @@ wskaznik_jakosci=sum(e.^2);
 yzad=yzad(1:kk-N)+Ypp;
 Y=Y(1:kk-N);
 U=U(1:kk-N);
-%wyniki symulacji
+
+%%%%%%%%prezentacja wyników symulacji%%%%%%%%
 figure; stairs(U);hold on
 title('Sygna³ sterowania DMC'); xlabel('k');
 figure; stairs(Y); hold on; 
