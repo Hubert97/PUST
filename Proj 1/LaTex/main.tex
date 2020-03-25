@@ -1,0 +1,168 @@
+
+
+
+\documentclass[a4paper,titlepage,11pt,twosides,floatssmall]{mwrep}
+
+%matlab style
+    \usepackage{listings}
+    \lstset{ 
+    	language=Matlab,                		% choose the language of the code
+    %	basicstyle=10pt,       				% the size of the fonts that are used for the code
+    	numbers=left,                  			% where to put the line-numbers
+    	numberstyle=\footnotesize,      		% the size of the fonts that are used for the line-numbers
+    	stepnumber=1,                   			% the step between two line-numbers. If it's 1 each line will be numbered
+    	numbersep=5pt,                  		% how far the line-numbers are from the code
+    %	backgroundcolor=\color{white},  	% choose the background color. You must add \usepackage{color}
+    	showspaces=false,               		% show spaces adding particular underscores
+    	showstringspaces=false,         		% underline spaces within strings
+    	showtabs=false,                 			% show tabs within strings adding particular underscores
+    %	frame=single,	                			% adds a frame around the code
+    %	tabsize=2,                				% sets default tabsize to 2 spaces
+    %	captionpos=b,                   			% sets the caption-position to bottom
+    	breaklines=true,                			% sets automatic line breaking
+    	breakatwhitespace=false,        		% sets if automatic breaks should only happen at whitespace
+    	escapeinside={\%*}{*)}  ,        		% if you want to add a comment within your code
+    	extendedchars=true,
+    literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1
+    }
+
+
+
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[OT1]{fontenc}
+\usepackage{polski}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{arrows,calc,decorations.markings,math,arrows.meta}
+\usepackage{rotating}
+\usepackage[percent]{overpic}
+% \usepackage[cp1250]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\usetikzlibrary{pgfplots.groupplots}
+\usepackage{listings}
+\usepackage{matlab-prettifier}
+\usepackage{enumitem,amssymb}
+
+
+\usepackage{hyperref}
+
+
+\definecolor{szary}{rgb}{0.95,0.95,0.95}
+\usepackage{siunitx}
+\usepackage{placeins}
+\sisetup{detect-weight,exponent-product=\cdot,output-decimal-marker={,},per-mode=symbol,binary-units=true,range-phrase={-},range-units=single}
+\SendSettingsToPgf
+%konfiguracje pakietu listings
+\lstset{
+	backgroundcolor=\color{szary},
+	frame=single,
+	breaklines=true,
+}
+\lstdefinestyle{customlatex}{
+	basicstyle=\footnotesize\ttfamily,
+	%basicstyle=\small\ttfamily,
+}
+\lstdefinestyle{customc}{
+	breaklines=true,
+	frame=tb,
+	language=C,
+	xleftmargin=0pt,
+	showstringspaces=false,
+	basicstyle=\small\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+}
+\lstdefinestyle{custommatlab}{
+	captionpos=t,
+	breaklines=true,
+	frame=tb,
+	xleftmargin=0pt,
+	language=matlab,
+	showstringspaces=false,
+	%basicstyle=\footnotesize\ttfamily,
+	basicstyle=\scriptsize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange},
+}
+
+%wymiar tekstu (bez �ywej paginy)
+\textwidth 160mm \textheight 247mm
+
+%ustawienia pakietu pgfplots
+\pgfplotsset{
+tick label style={font=\scriptsize},
+label style={font=\small},
+legend style={font=\small},
+title style={font=\small}
+}
+
+\def\figurename{Rys.}
+\def\tablename{Tab.}
+
+%konfiguracja liczby p�ywaj�cych element�w
+\setcounter{topnumber}{0}%2
+\setcounter{bottomnumber}{3}%1
+\setcounter{totalnumber}{5}%3
+\renewcommand{\textfraction}{0.01}%0.2
+\renewcommand{\topfraction}{0.95}%0.7
+\renewcommand{\bottomfraction}{0.95}%0.3
+\renewcommand{\floatpagefraction}{0.35}%0.5
+
+\begin{document}
+\frenchspacing
+\pagestyle{plain} %zmieniłem z uheadings żeby były numery stron
+
+%strona tytu�owa
+\title{\bf\vskip 0.1cm}
+\author{Hubert Kowalski, Rafał Wiercioch, Kuba Świerlikowski}
+\date{2020}
+
+\makeatletter
+\renewcommand{\maketitle}{\begin{titlepage}
+\begin{center}{\LARGE {\bf
+Wydział Elektroniki i Technik Informacyjnych}}\\
+\vspace{0.4cm}
+{\LARGE {\bf Politechnika Warszawska}}\\
+\vspace{0.3cm}
+\end{center}
+\vspace{5cm}
+\begin{center}
+{\bf \LARGE Projektowanie układów sterowania \vskip 0.1cm}
+\end{center}
+\vspace{1cm}
+\begin{center}
+{\bf \LARGE Projekt I \vskip 0.1cm}
+\end{center}
+\vspace{1cm}
+\begin{center}
+{\bf \LARGE \@title}
+\end{center}
+% https://www.overleaf.com/project/5e7608384f07e60001a452c0
+\vspace{2cm}
+\begin{center}
+{\bf \Large \@author \par}
+\end{center}
+\vspace*{\stretch{6}}
+\begin{center}
+\bf{\large{Warszawa, \@date\vskip 0.1cm}}
+\end{center}
+\end{titlepage}
+}
+
+
+\maketitle
+\tableofcontents
+\input{Lab1}
+
+\end{document}

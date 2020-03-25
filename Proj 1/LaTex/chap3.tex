@@ -1,0 +1,44 @@
+\chapter{Przekształcanie odpowiedzi skokowej i charakterystyka statyczna}
+    \section{Implementacja}
+    Implementacja zadania w środowisku Matlab jest w pliku \texttt{Zad2\_3}.
+    \section{Przekształcanie odpowiedzi skokowej}
+    Do wyznaczenia odpowiedzi skokowej użyto danych uzyskanych przy skoku wartości sterowania z wartości $\num{1,5}$ do $2$. Jako, że skok ten został wykonany w chwili dyskretnej $k=20$, seria danych wykorzystana do uzyskania odpowiedzi skokowej to wartości sygnału wyjściowego rejestrowane od chwili $k=21$. Przekształcanie odpowiedzi skokowej odbyło się z wykorzystaniem wzoru:
+    
+    \begin{equation}
+    S_i=\frac{ {S_i-Y_{\mathrm{PP}}} }{\Delta{U}}\mathrm{,\;dla\;}{ i}\mathrm{\;= 1,...}
+    \end{equation}
+    
+    , gdzie:\newline 
+    $S_{i}$ - gotowa odpowiedź skokowa podawana jako model regulatora DMC, \newline
+    $S_{i}^0$  - seria pomiarów pozyskanych w celu wyznaczenia odpowiedzi skokowej,czyli wartości sygnałów wyjściowych od chwili dyskretnej $k=21$ \newline
+    $\Delta{U}$ - przyrost wartości sterowania, czyli $\num{0,5}$.\newline
+    Odpowiedź skokowa jest widoczna na rysunku poniżej:
+
+
+
+\begin{tikzpicture}
+\begin{axis}[
+     width=14cm,
+    height=10cm,
+    title={Odpowiedź skokowa},
+    xlabel={Próbki},
+    ylabel={Wartość},
+    xmin=25, xmax=300,
+    ymin=0, ymax=1,
+    legend pos=north east,
+    ymajorgrids=true,
+    grid style=dashed
+]
+
+\addplot[
+    color=red,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =5.txt};
+ \addlegendentry{$\Delta$U = 0,5};
+
+
+
+\end{axis}
+\end{tikzpicture}

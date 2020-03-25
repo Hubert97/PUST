@@ -1,0 +1,59 @@
+\input{chap1}
+\input{chap2}
+\input{chap3}
+\input{chap4}
+\input{chap5}
+\input{chap6}
+
+  \iffalse
+\begin{tikzpicture}
+\begin{axis}[
+     width=14cm,
+    height=10cm,
+    title={DMC D=15, lambda=N=50, Nu=20},
+    xlabel={Czas},
+    ylabel={Wartość},
+    xmin=0, xmax=400,
+    ymin=0.5, ymax=4,
+    legend pos=north west,
+    ymajorgrids=true,
+    grid style=dashed
+]
+
+\addplot[
+    color=blue,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/BadDMC/DMCy.txt};
+ \addlegendentry{Wyjście procesu Y};
+ 
+\addplot[
+        color=red,
+        mark size=0.9pt
+        ]
+table[]
+{img/txt/BadDMC/DMCu.txt};
+ \addlegendentry{Wyjście regulatora U};
+
+\addplot[
+        color=purple,
+        dotted,
+        mark=*,
+        mark options={solid},
+        smooth,
+        mark size=0.05pt
+    ]
+table[]
+{img/txt/BadDMC/DMCyzad.txt};
+
+\addlegendentry{Wartość zadana Yzad};
+
+\end{axis}
+\end{tikzpicture}
+\fi
+
+    
+
+    
+    

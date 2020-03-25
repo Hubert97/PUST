@@ -1,0 +1,183 @@
+\chapter{Dobór nastaw i parametrów regulatorów PID i DMC metodą analityczną}
+    \section{Implementacja}
+    Implementacja w środowisku Matlab znajduje się w \texttt{plikach PID\_optymalizacja}, \texttt{DMC\_optymalizacja}, \texttt{PID\_fun.m}, \texttt{DMC\_fun}.
+    
+    Na początku wcześniej napisane algorytmy PID oraz DMC zostały przeniesione do następujących funkcji:
+    \newline
+    function wskaznik\_jakosci=PID\_fun(parameters)
+    \newline
+    function wskaznik\_jakosci=DMC\_fun(parameters)
+    \newline
+    , które jak widać jako argumenty przyjmują parametry regulacji, a zwracają wartość wskaźnika jakości regulacji. Następnie w plikach PID\_optymalizacja.m, DMC\_optymalizacja.m przekazano powyższe funkcje do funkcji optymalizującej programu MATLAB o nazwie fmincon. W przypadku regulatora PID ograniczenia dolne wyglądały następująco:
+    
+    \begin{equation}
+        K\geqslant{\num{0,1}},\;  T_{\mathrm{i}}\geqslant{\num{0,1}},\; T_{\mathrm{d}}\geqslant{\num{0,1}} 
+    \end{equation}
+    
+    natomiast w przypadku regulatora DMC:
+    \begin{equation}
+ 	    N\geqslant{1},\; N_{\mathrm{u}}\geqslant{1},\; \lambda\geqslant{1}
+    \end{equation}
+    
+    Ograniczeń górnych nie uwzględniono. Jako wartości początkowe przyjęto wartości wyznaczone eksperymentalnie. W przypadku regulatora DMC wprowadzono restrykcję sprawiającą, że obliczone parametry muszą być całkowitoliczbowe ze względu na to, że rozmiar macierzy tworzonych w algorytmie regulacji DMC od nich zależy, a z oczywistych względów rozmiar macierzy nie może być liczbą niecałkowitą.
+    \paragraph{}
+    Po wykonaniu optymalizacji funkcją fmincon() nastawy obu algorytmów są zapisywane jako przestrzeń robocza programu MATLAB w plikach o nazwach:
+    \newline\newline
+    \texttt{optymalne\_parametry\_DMC.mat}
+    \newline
+    \texttt{optymalne\_parametry\_PID.mat}
+    \paragraph{} 
+    W zmiennych nazywających się odpowiednio:
+    \newline\newline
+    \texttt{nastawy\_DMC\_fmincon}
+    \newline
+    \texttt{nastawy\_PID\_fmincon}
+    \newline\newline
+
+    \newpage
+    \section{Wyniki optymalizacji}
+    Parametry oraz wskaźniki uzyskane w wyniku optymalizacji wskaźnika jakości regulacji E przedstawiają się następująco:
+    \newline\newline
+    Regulator PID:
+       %  \iffalse %komentarz
+    \begin{center}
+        \textsc{$K=\num{6,0667}$, $T_{\mathrm{i}}=\num{7,1952}$, $T_{\mathrm{d}}=\num{3,8373}$, $E=$\num{9,2884}}  
+    \end{center}
+    
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={PID Strojenie przy użyciu funkcji fmincon},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.8,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/PID/PIDStrojeniefmincon/Skoki/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+ 
+        
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/PID/PIDStrojeniefmincon/Skoki/OUTyzad.txt};
+        
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+      
+      
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={PID Strojenie przy użyciu funkcji fmincon},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.5,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/PID/PIDStrojeniefmincon/Skoki/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+    \end{axis}
+\end{tikzpicture}
+    
+    \newpage
+    Regulator DMC:
+    \begin{center}
+        \textsc{$N=51$, $N_{\mathrm{u}}=144$, $\lambda=1$, $E=8,5711$}  
+    \end{center}
+    
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC Strojenie przy użyciu funkcji fmincon},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.8,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Fmin/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Fmin/OUTyzad.txt};
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+    
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC Strojenie przy użyciu funkcji fmincon},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.4,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_Fmin/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+
+        \end{axis}
+\end{tikzpicture}
+
+    \newpage
+    \section{Wnioski}
+    Jak widać, w przypadku regulatora PID mimo że wskaźnik jakości regulacji jest znacznie niższy niż w przypadku eksperymentalnie dobranych parametrów, to występują duże oscylacje - obiekt nie stabilizuje się po osiągnięciu wartości zadanej. Oznacza to, że te parametry są zdecydowanie gorsze od parametrów eksperymentlanych i należałoby z tego wyciągnąć wniosek, że przy strojeniu regulatora PID nie należy kierować się tylko i wyłącznie sumą kwadratów uzyskanych uchybów.
+    \paragraph{}
+    W przypadku regulatora DMC dobrane parametry zapewniają mniejszą wartość wskaźnika E oraz dobrą jakość regulacji. Jest ona porównywalna do jakości regulacji otrzymanej przy parametrach dobranych eksperymentalnie, choć należy wspomnieć, że w wersji zoptymalizowanej występują nieznacznie większe przeregulowania. 

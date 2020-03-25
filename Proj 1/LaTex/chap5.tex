@@ -1,0 +1,467 @@
+\chapter{Dobór nastaw i parametrów regulatorów PID i DMC metodą eksperymentalną}
+    \section{Implementacja}
+    Implementacja zadania w środowsku Matlab jest w plikach \texttt{Zad4\_PID} i \texttt{Zad4\_DMC}.
+    \section{Dobór nastaw regulatora PID metodą eksperymentalną.}
+    Dobór nastaw odbył się metodą „inżynierską” tzn. obiekt regulacji został wprowadzony w oscylacje nierosnące i niegasnące za pomocą odpowiedniej wartości wzmocnienia. Takie wzmocnie nazywamy krytycznym i w tym przypadku było równe $K_{\mathrm{kryt}}=\num{5,03}$. 
+    
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    %K=5,03 -Kkryt
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={PID $K_{\mathrm{kryt}}=\num{5,03}$},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=2, ymax=2.6,
+            legend pos=north west,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/PID/PIDKkryt=5,3/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(K)$};
+        
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/PID/PIDKkryt=5,3/OUTyzad.txt};
+        
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+    \paragraph{}
+    Mnożąc go przez $\num{0,5}$ uzyskaliśmy człon proporcjonalny. Potem dobraliśmy taki czas zdwojenia $T_{\mathrm{i}}$, by uzyskać zadowalającą wielkość wskaźnika jakości regulacji. Na koniec dobraliśmy taki czas wyprzedzenia $T_{\mathrm{d}}$, żeby wskaźnik jakości regulacji był jak najmniejszy.
+    \paragraph{}
+    {  }W obu algorytmach liczony był wskaźnik jakości regulacji ze wzoru:
+   
+    \begin{equation}
+        E=\sum_{k=1}^{k_{\mathrm{konc}}}(y^{\mathrm{zad}}(k)-y(k))^2
+    \end{equation}
+    
+    Ostateczne wartości parametrów dobranych metodą inżynierską:
+    $K=\num{2,515}$, $T_{\mathrm{i}}=22$, $T_{\mathrm{d}}=7$
+    Wartość wskaźnika jakości regulacji wyniosła $E= \num{17,1744}$
+   
+   %strojenie inzynierksie 
+    
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={PID Strojenie metodą eksperymentalną},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.6, ymax=2.8,
+            legend pos=north west,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/PID/PID_Strojenie_INZ/Skoki/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/PID/PID_Strojenie_INZ/Skoki/OUTyzad.txt};
+        
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+    
+      
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={PID Strojenie metodą eksperymentalną},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+           ymin=1, ymax=2.5,
+            legend pos=north west,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/PID/PID_Strojenie_INZ/Skoki/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+        \end{axis}
+\end{tikzpicture}
+    \newpage
+
+    \section{Dobór parametrów algorytmu DMC metodą eksperymentalną}
+    Na początku przy dużych wartościach parametrów $N=50$ oraz $N_{\mathrm{u}}=15$ i parametrze lambda=1 zmniejszano wartość parametru $D$ od wartości $D=200$ do $D=50$. 
+    \newline\newline
+    %%%%%%%%%%%%%%%%start
+\begin{tikzpicture}
+            \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC  Początkowe Wartości},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.6,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Start/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Start/OUTyzad.txt};
+        
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+            \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC początkowe wartości parametrów},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.2,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_Start/OUTu.txt};
+         \addlegendentry{Sygnał sterujący U(k)};
+
+        
+        \end{axis}
+\end{tikzpicture}
+
+    %%%%%%%%%%   D
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalna wartość D},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.6,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_D_op/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_D_op/OUTyzad.txt};
+        
+        \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne D},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.2,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_D_op/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+
+        
+        \end{axis}
+\end{tikzpicture}
+
+%%%%%%%%%%%% N
+
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne $N$},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.6,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_N_op/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_N_op/OUTyzad.txt};
+                 \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne N},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.2,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+
+         
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_N_op/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+    
+        \end{axis}
+\end{tikzpicture}
+
+
+
+%%%%%%%%%%%% NU
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne Nu},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.6,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Nu_op/OUTy.txt};
+         \addlegendentry{Wyjście procesu $Y(k)$};
+         
+
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_Nu_op/OUTyzad.txt};
+         \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne $N_{\mathrm{u}}$},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.2,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_Nu_op/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+   
+    Starano się uzyskać możliwie małą wartość tego parametru, przy której regulacja przebiegała dobrze (tzn. po ustabilizowaniu się na odpowiedniej wartości zadanej po pewnym czasie nie było widocznego skoku wartości sygnału wyjściowego), a przy tym wskaźnik jakości był wystarczająco mały. Kolejnym strojonym parametrem był parametr $N$, który również był stopniowo zmniejszany i oceniany pod względem jakości regulacji. Analogicznie postąpiono z parametrem $N_{\mathrm{u}}$. Parametr lambda natomiast był stopniowo zwiększany, lecz jego wzrost nie implikował wzrostu jakości regulacji.
+    
+    
+    Ostatecznie optymalne parametry uzyskane eksperymentalnie wyniosły:
+    $D=150$; $N=35$, $N_{\mathrm{u}}=5$, $\lambda=1$.
+    Wartość wskaźnika jakości regulacji wyniosła: $E= \num{8,5954}$.
+ 
+   %punkt startowy strojenia inz
+    
+  %%%%%%%%%%%% lamb
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne wartości wszystkich parametrów},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=1.8, ymax=2.6,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_lamb_op/OUTy.txt};
+         \addlegendentry{Wyjście procesu Y(k)};
+        \addplot[
+                color=purple,
+                dotted,
+                mark=*,
+                mark options={solid},
+                smooth,
+                mark size=0.05pt
+            ]
+        table[]
+        {img/txt/DMC/DMC_lamb_op/OUTyzad.txt};
+                 \addlegendentry{Wartość zadana $Y_{\mathrm{zad}}(k)$};
+        
+        \end{axis}
+\end{tikzpicture}
+
+
+
+\begin{tikzpicture}
+        \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={DMC optymalne wartości wszystkich parametrów},
+            xlabel={Próbki},
+            ylabel={Wartość},
+            xmin=0, xmax=1400,
+            ymin=0.8, ymax=2.2,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        \addplot[
+                color=red,
+                mark size=0.9pt
+                ]
+        table[]
+        {img/txt/DMC/DMC_lamb_op/OUTu.txt};
+         \addlegendentry{Sygnał sterujący $U(k)$};
+
+        \end{axis}
+\end{tikzpicture}

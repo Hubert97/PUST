@@ -1,0 +1,155 @@
+ \chapter{Odpowiedź skokowa procesu}
+    \section{Implementacja}
+        Implementacja zadania w środowisku Matlab jest w pliku \texttt{zad2\_3\_odpowiedzi\_skokowe}.
+        
+    \section{Przygotowanie odpowiedzi skokowej dla algorymu DMC}
+        Zostało wyznaczonych symulacyjnie 5 odpowiedzi skokowych, o skokach z wartości $U=\num{1,5}$ na kolejno $U=\num{1,6}$, $U=\num{1,7}$, $U=\num{1,8}$, $U=\num{1,9}$, $U=\num{2,0}$.
+
+        Uwzględniono ograniczenia sygnału w postaci $U_{\mathrm{min}}$ = 1, $U_{\mathrm{max}}$ = 2.
+        
+
+\begin{tikzpicture}
+\begin{axis}[
+     width=14cm,
+    height=10cm,
+    title={Odpowiedzi skokowe - Wyjście procesu Y(k)},
+    xlabel={Próbki},
+    ylabel={Wartość},
+    xmin=0, xmax=300,
+    ymin=2.1, ymax=2.6,
+    legend pos=north east,
+    ymajorgrids=true,
+    grid style=dashed
+]
+
+\addplot[
+    color=red,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =6.txt};
+ \addlegendentry{$\Delta$U = 0,5};
+ \addplot[
+    color=blue,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =4.txt};
+ \addlegendentry{$\Delta$U = 0,4};
+ 
+ \addplot[
+    color=orange,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =3.txt};
+ \addlegendentry{$\Delta$U = 0,3};
+ 
+\addplot[
+    color=purple,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =2.txt};
+ \addlegendentry{$\Delta$U = 0,2};
+ 
+\addplot[
+    color=brown,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/Y/skok i =1.txt};
+ \addlegendentry{$\Delta$U = 0,1};
+ 
+\end{axis}
+\end{tikzpicture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%wejscie procesu%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{tikzpicture}
+\begin{axis}[
+     width=14cm,
+    height=10cm,
+    title={Odpowiedzi skokowe - Sygnał sterujący $U(k)$},
+    xlabel={Próbki},
+    ylabel={Wartość},
+    xmin=0, xmax=300,
+    ymin=1.4, ymax=2.1,
+    legend pos=north east,
+    ymajorgrids=true,
+    grid style=dashed
+]
+
+\addplot[
+    color=red,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/U/skok i =5.txt};
+ \addlegendentry{$\Delta$U = 0,5};
+ \addplot[
+    color=blue,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/U/skok i =4.txt};
+ \addlegendentry{$\Delta$U = 0,4};
+ 
+ \addplot[
+    color=orange,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/U/skok i =3.txt};
+ \addlegendentry{$\Delta$U = 0,3};
+ 
+\addplot[
+    color=purple,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/U/skok i =2.txt};
+ \addlegendentry{$\Delta$U = 0,2};
+ 
+\addplot[
+    color=brown,
+    mark size=0.9pt
+    ]
+table[]
+{img/txt/SKOKI_DMC/U/skok i =1.txt};
+ \addlegendentry{$\Delta$U = 0,1};
+ 
+
+\end{axis}
+\end{tikzpicture}
+
+    Z powyższych wykresów wynika, że odpowiedź skokowa obiektu zmienia się proporcjonalnie, wraz z wartościami skoku sygnału sterującego. Wskazuje to na liniowe w przybliżeniu właściwości dynamiczne procesu. 
+    \newpage
+    
+    \section{Charakterystyka statyczna}
+    Charakterystyka statyczna procesu widoczna na rysunku poniżej została wyznaczona poprzez symulowanie układu z różnymi wartościami sygnału wejściowego. Z wykresu widać że obiekt w przedziale $[1,2]$ ma w przybliżeniu właściwości statyczne. Wzmocnienie statyczne liczone jako współczynnik kierunkowy prostej zostało obliczone na $K_{\mathrm{stat}} = \num{0,77078}$.\paragraph{}
+    
+
+    \begin{tikzpicture}
+            \begin{axis}[
+             width=14cm,
+            height=10cm,
+            title={Charakterystyka statyczna},
+            xlabel={U},
+            ylabel={Y},
+            xmin=-0, xmax=3,
+            ymin=1.6, ymax=2.8,
+            legend pos=north east,
+            ymajorgrids=true,
+            grid style=dashed
+        ]
+        
+        \addplot[
+            color=blue,
+            mark size=0.9pt
+            ]
+        table[]
+        {img/txt/Kstat/OUTy.txt};
+     
+        \end{axis}
+\end{tikzpicture}

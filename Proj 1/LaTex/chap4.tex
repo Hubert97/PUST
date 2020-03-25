@@ -1,0 +1,71 @@
+\chapter{Implementacja regulatorów PID i DMC w Matlabie}
+    \section{Implementacja}
+    Implementacja zadania w środowsku Matlab jest w plikach \texttt{zad4\_PID} i \texttt{zad4\_DMC}.\paragraph{}
+    
+    Zgodnie z instrukcjami zawartymi w materiałach ćwiczeniowych w algorytmie jest zaimplementowane przesunięcie do punktu pracy $[0,0]$. Przed algorytmem regulacji dokonano podstawienia $Y = Y – Y_{\mathrm{PP}}$ oraz $Y_{\mathrm{zad}}=Y_{\mathrm{zad}}-Y_{\mathrm{PP}}$,
+    natomiast po wyznaczeniu wartości sterowania dokonano podstawienia $U = U + U_{\mathrm{PP}}$, uprzednio uwzględniając ograniczenia według poniższego pseudokodu:
+    \newline\newline
+    jeżeli $\Delta{u}(k|k)<-\Delta{u^\mathrm{max}}${ to }
+    $\Delta{u}(k|k)=-\Delta{u^\mathrm{max}}$
+    \newline
+    jeżeli $\Delta{u}(k|k)<\Delta{u^\mathrm{max}}${ to }
+    $\Delta{u}(k|k)=\Delta{u^\mathrm{max}}$
+    \newline
+    $u(k|k)=\Delta{u}(k|k)+u(k-1)$
+    \newline
+    jeżeli $u(k|k)<u^\mathrm{min}${ to }
+    $u(k|k)=u^\mathrm{min}$
+    \newline
+    jeżeli $u(k|k)>u^\mathrm{max}${ to }
+    $u(k|k)=u^\mathrm{max}$   
+    \newline
+    $u(k)=u(k|k)$
+    \newline
+    
+    Z racji tego, że ograniczenia uwzględniano przed dokonaniem podstawienia $U=U+U_{\mathrm{PP}}$, zostały one przesunięte przed algorytmem regulacji w następujący sposób:
+    
+    $U_{\mathrm{max}}=U_{\mathrm{max}}-U_{\mathrm{PP}}$, $U_{\mathrm{min}}=U_{\mathrm{min}}-U_{\mathrm{PP}}$.
+        
+    
+    \section{Regulator PID}
+    Regulator PID został zaimplementowany na podstawie wzorów:
+    
+    \begin{equation}
+        u(k)=r_2e(k-2)+r_1e(k-1)+r_0e(k)+u(k-1)
+    \end{equation}
+    
+    \begin{equation}
+        r_2=\frac{KT_{\mathrm{d}}}{T},\; 
+        r_1=K(\frac{T}{2T_{\mathrm{i}}}
+            -2\frac{T_{\mathrm{d}}}{T}
+            -1),\; 
+        r_0=K(1+\frac{T}{2T_{\mathrm{i}}}
+            +\frac{T_{\mathrm{d}}}{T})
+    \end{equation}   
+    
+    Gdzie $e(k)$ to uchyb w chwiki $k$ wyrażony wzorem:
+    
+    \begin{equation}
+       e(k)=y_{zad}(k)-y(k)
+    \end{equation}
+    
+    \section{Regulator DMC}
+    Regulator DMC został zaimplementowany na podstawie wzorów podanych na ćwiczeniach i udostępnionych na stronie przedmiotu.
+    \newline
+    Również tutaj zostało zaimplementowane przesunięcie do punktu pracy $[0,0]$ opisane w punkcie 4.2 .
+    
+    \section{Program do symulacji algorytmu DMC}
+    Program działa w oparciu o następujący pseudokod:\newline\newline
+    \texttt{INICJALIZACJA}\newline
+    \texttt{Na podstawie odpowiedzi skokowej oblicz macierze: $M^P$, $M$, $K$}\newline\newline
+    \texttt{DLA KAŻDEJ CHWILI k:}\newline
+    \texttt{1. Pomiar $y(k)$}\newline
+    \texttt{2. Oblicz macierze: $\Delta{U^P(k)}$,$Y(k)$,$Y^0(k)$}\newline
+    \texttt{3. Oblicz: $\Delta{U(k)}=K(Y^{\mathrm{zad}}(k)-Y^0(k))$}\newline
+    \texttt{4. Zastosuj do sterowania pierwszy element $\Delta{U(k)}$: $u(k)=\Delta{u}(k|k)+u(k-1)$}\newline
+    \paragraph{}
+    Wzory na powyższe macierze zostały zaczerpnięte z materiałów do ćwiczeń.
+    
+    
+   
+    
