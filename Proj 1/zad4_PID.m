@@ -29,17 +29,22 @@ yzad(round(kk/5):round(2*kk/5))=2.1;
 yzad(round(2*kk/5):round(3*kk/5))=2;
 yzad(round(3*kk/5):round(4*kk/5))=2.3;
 yzad(round(4*kk/5):round(5*kk/5))=2.4;
+
+%yzad(1:kk)=2.3;
 yzad=yzad-Ypp;
 
-load('optymalne_parametry_PID.mat');
+%load('optymalne_parametry_PID.mat');
 K_kryt=5.03; T_kryt=0;
 %K=5.03; Ti=inf; Td=0; %niegasnace oscylacje
-%K=K_kryt*0.5; Ti=22; Td=7; %NAJLEPSZE EKSPERYMENTALNE PARAMETRY
+%K=5.04; Ti=inf; Td=0; %niegasnace oscylacje
 
-K=nastawy_PID_fmincon(1); Ti=nastawy_PID_fmincon(2); Td=nastawy_PID_fmincon(3);  %parametry dobrane funkcj¹ fmincon
+K=K_kryt*0.5; Ti=22; Td=7; %NAJLEPSZE EKSPERYMENTALNE PARAMETRY
+
+%K=nastawy_PID_fmincon(1); Ti=nastawy_PID_fmincon(2); Td=nastawy_PID_fmincon(3);  %parametry dobrane funkcj¹ fmincon
 %K=nastawy_PID_ga(1); Ti=nastawy_PID_ga(2); Td=nastawy_PID_ga(3); %parametry dobrane przez
                                                     %funkcje ga()
 T=0.5;
+
 
 r2=K*Td/T;
 r1=K*(T/(2*Ti)-2*Td/T-1);
